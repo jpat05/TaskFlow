@@ -16,7 +16,7 @@ class TaskFlowApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
         useMaterial3: true,
       ),
-      home: const WelcomeScreen(),
+      home: const TaskListScreen(),
     );
   }
 }
@@ -105,6 +105,110 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class Task {
+  const Task({
+    required this.id,
+    required this.title,
+    required this.description,
+    required this.priority,
+    required this.isCompleted,
+  });
+
+  final int id;
+  final String title;
+  final String description;
+  final String priority;
+  final bool isCompleted;
+}
+
+const demoTasks = [
+  Task(
+    id: 1,
+    title: 'Gestionar usuarios de la biblioteca',
+    description:
+        'Implementar el registro, consulta y administración de usuarios, '
+        'incluyendo roles, estados y códigos de membresía.',
+    priority: 'Alta',
+    isCompleted: false,
+  ),
+  Task(
+    id: 2,
+    title: 'Administrar el catálogo de libros',
+    description:
+        'Desarrollar el registro y consulta de libros, autores, '
+        'editoriales y categorías, incluyendo ISBN y datos bibliográficos.',
+    priority: 'Alta',
+    isCompleted: false,
+  ),
+  Task(
+    id: 3,
+    title: 'Controlar el inventario de ejemplares',
+    description:
+        'Implementar el control de ejemplares físicos mediante códigos '
+        'de barras, ubicación en estantería, estado y condición.',
+    priority: 'Media',
+    isCompleted: false,
+  ),
+  Task(
+    id: 4,
+    title: 'Gestionar préstamos y reservas',
+    description:
+        'Desarrollar el proceso de préstamo, devolución, renovación '
+        'y reserva de libros, controlando fechas y disponibilidad.',
+    priority: 'Alta',
+    isCompleted: false,
+  ),
+  Task(
+    id: 5,
+    title: 'Administrar multas y políticas',
+    description:
+        'Implementar el cálculo y seguimiento de multas por retraso, '
+        'daños o pérdida, además de configurar las políticas de préstamo.',
+    priority: 'Media',
+    isCompleted: true,
+  ),
+];
+
+class TaskCard extends StatelessWidget {
+  const TaskCard({super.key, required this.task});
+
+  final Task task;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        leading: Icon(
+          task.isCompleted ? Icons.check_circle : Icons.radio_button_unchecked,
+          color: task.isCompleted ? Colors.green : null,
+        ),
+        title: Text(task.title),
+        subtitle: Text('${task.priority} · ${task.description}'),
+        trailing: const Icon(Icons.visibility),
+      ),
+    );
+  }
+}
+
+class TaskListScreen extends StatelessWidget {
+  const TaskListScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Mis tareas')),
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: demoTasks.length,
+        itemBuilder: (context, index) {
+          final task = demoTasks[index];
+          return TaskCard(task: task);
+        },
       ),
     );
   }
